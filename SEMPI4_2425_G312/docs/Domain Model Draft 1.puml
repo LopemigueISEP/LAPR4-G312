@@ -1,0 +1,119 @@
+@startuml
+' Define domain entities
+class User {
+  - email: String
+  - name: String
+  - phoneNumber: String
+  - authenticate(): Boolean
+}
+
+class Client {
+  - vatNumber: String
+  - name: String
+  - address: String
+  - status: ClientStatus
+  - representatives: List<Representative>
+}
+
+
+class Representative {
+  - email: String
+  - name: String
+  - position: String
+}
+
+class ShowRequest {
+  - requestId: String
+  - client: Client
+  - location: String
+  - dateTime: DateTime
+  - numberOfDrones: Int
+  - description: String
+  - status: ShowRequestStatus
+  - figures: List<Figure>
+}
+
+class Figure {
+  - code: String
+  - description: String
+  - version: Int
+  - exclusive: Boolean
+  - dslCode: String
+}
+
+class Show {
+  - showId: String
+  - figures: List<Figure>
+  - status: ShowStatus
+}
+
+class Simulation {
+  - simulationId: String
+  - show: Show
+  - status: SimulationStatus
+  - runSimulation(): Boolean
+}
+
+class Drone {
+  - droneId: String
+  - model: String
+  - softwareVersion: String
+}
+
+class Orchestrator {
+  - orchestrateShow(show: Show): Boolean
+}
+
+' Define relationships
+User --|> Admin
+User --|> CRMManager
+User --|> CRMCollaborator
+User --|> ShowDesigner
+User --|> DroneTech
+
+Client "1" -- "many" Representative
+Client "1" -- "many" ShowRequest
+ShowRequest "1" -- "many" Figure
+Figure "many" -- "1" Show
+Show "1" -- "1" Simulation
+Simulation "1" -- "many" Drone
+Orchestrator "1" -- "1" Simulation
+
+' Define roles
+class Admin
+class CRMManager
+class CRMCollaborator
+class ShowDesigner
+class DroneTech
+
+' Define enumerations
+enum ClientStatus {
+  Created
+  Regular
+  VIP
+  Infringement
+  Deleted
+}
+
+enum ShowRequestStatus {
+  Submitted
+  UnderReview
+  Approved
+  Rejected
+  Scheduled
+}
+
+enum ShowStatus {
+  Planned
+  Running
+  Completed
+}
+
+enum SimulationStatus {
+  Pending
+  Running
+  Success
+  CollisionDetected
+}
+
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+package Library{
+class Figure{
+
+}
+
+
+class Sequence{
+}
+}
+@enduml
