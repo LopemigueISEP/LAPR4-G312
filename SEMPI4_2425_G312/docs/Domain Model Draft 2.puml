@@ -5,7 +5,8 @@ package Library{
         - figureCode
         - description
         - version
-        -
+        - exclusive
+        - exclusivePeriod
     }
 
     class FigureCode{
@@ -20,13 +21,14 @@ class Client{
     - status
     - representatives
 }
-class ClientStatus{
+enum ClientStatus{
     Created
     Regular
     VIP
     Infringement
     Deleted
 }
+
 class Representative {
   - email: String
   - name: String
@@ -68,6 +70,13 @@ class ShowRequest{
     - description
     - attachment
 }
+enum ShowRequestStatus {
+  Submitted
+  UnderReview
+  Approved
+  Rejected
+  Scheduled
+}
 class DroneMaintenanceHistory{
 }
 class Inventory{
@@ -98,11 +107,10 @@ Client        "*"  -- "1"  Representative : has >
 CRMManager    "1"  -- "*"  ShowRequest : assigns >
 ShowRequest   "1"  --- "1"  System : adds >
 CRMCollaborator "1" --- "1"  ShowRequest : submits >
-CRMCollaborator "1" --- "1"  Client : creates >
+CRMCollaborator "1" --- "1"  Client : manages >
 
 ' Show Proposal '
-CRMCollaborator "1" --- "1"  ShowProposal : generates >
-CRMCollaborator "1" --- "1"  ShowProposal : updates >
+CRMCollaborator "1" --- "1"  ShowProposal : manages >
 Proposal         "1" --- "1"  Client : sent >
 
 ' Show Design '
