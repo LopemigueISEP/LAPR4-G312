@@ -1,11 +1,149 @@
 @startuml
 package Library{
-class Figure{
+    class Figure{
+        - drones
+        - figureCode
+        - description
+        - version
+        -
+    }
 
+    class FigureCode{
+    }
+    class Sequence{
+    }
+}
+class Client{
+    - vatNumber
+    - name
+    - address
+    - status
+    - representatives
+}
+class ClientStatus{
+    Created
+    Regular
+    VIP
+    Infringement
+    Deleted
+}
+class Representative {
+  - email: String
+  - name: String
+  - position: String
+}
+class ShowProposal{
+}
+class Show{
+    - figures
+    - showCode
+}
+class ShowCode{
+}
+class Simulation{
+}
+class User{
+    - email
+    - name
+    - phoneNumber
+    - password
+    - role
+}
+class Admin{
+}
+class  CRMManager{
+}
+class CRMCollaborator{
+}
+class ShowDesigner{
+}
+class DroneTech{
+}
+class ShowRequest{
+    - client
+    - place
+    - time
+    - numOfDrones
+    - duration
+    - description
+    - attachment
+}
+class DroneMaintenanceHistory{
+}
+class Inventory{
+}
+class DroneModel{
+}
+class System{
+}
+class Drone{
+    - droneModel
+    - routine
 }
 
+/' Relationships '/
 
-class Sequence{
-}
-}
+' System & User '
+Admin         "1"  -  "*"  User  : manages >
+User          "1"  -  "1"  System : accesses >
+
+' Client Management '
+CRMManager    "1"  -- "*"  Client : manages >
+Client        "*"  -- "1"  ClientStatus : has >
+Client        "*"  -- "1"  CRMCollaborator : contacts >
+Client        "*"  -- "1"  ShowProposal : accepts >
+Client        "*"  -- "1"  Representative : has >
+
+' Show Requests '
+CRMManager    "1"  -- "*"  ShowRequest : assigns >
+ShowRequest   "1"  --- "1"  System : adds >
+CRMCollaborator "1" --- "1"  ShowRequest : submits >
+CRMCollaborator "1" --- "1"  Client : creates >
+
+' Show Proposal '
+CRMCollaborator "1" --- "1"  ShowProposal : generates >
+CRMCollaborator "1" --- "1"  ShowProposal : updates >
+Proposal         "1" --- "1"  Client : sent >
+
+' Show Design '
+ShowDesigner   "1" --- "*"  Figure : creates >
+ShowDesigner   "1" --- "*"  ShowRequest : designs >
+
+' Show Scheduling '
+CRMCollaborator "1" --- "*"  Show : schedules >
+
+' Drone Tech Operations '
+DroneTech      "1" --- "*"  DroneMaintenanceHistory : manages >
+DroneTech      "1" --- "*"  Inventory : manages >
+DroneTech      "1" --- "*"  DroneModel : creates >
+DroneTech      "1" --- "*"  Figure : generates >
+DroneTech      "1" --- "*"  Figure : tests >
+DroneTech      "1" --- "*"  Show : generates >
+DroneTech      "1" --- "*"  ShowCode : generates >
+DroneTech      "1" --- "*"  ShowCode : tests >
+DroneTech      "1" --- "*"  Show : tests >
+DroneTech      "1" --- "*"  Simulation : generates >
+
+' Figure Relationships '
+Figure         "1" --- "1"  FigureCode : has >
+
+' Show Relationships '
+Show           "1" --- "1"  ShowCode : has >
+Show           "1" --- "*"  Figure : has >
+Show           "1" --- "*"  Drone : has >
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @enduml
