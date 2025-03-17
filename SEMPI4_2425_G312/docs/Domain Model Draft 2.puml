@@ -69,6 +69,7 @@ class ShowRequest{
     - duration
     - description
     - attachment
+    - showRequestStatus
 }
 enum ShowRequestStatus {
   Submitted
@@ -106,6 +107,7 @@ Client        "*"  -- "1"  Representative : has >
 ' Show Requests '
 CRMManager    "1"  -- "*"  ShowRequest : assigns >
 ShowRequest   "1"  --- "1"  System : adds >
+ShowRequest   "1"  --- "1"  ShowRequestStatus : has >
 CRMCollaborator "1" --- "1"  ShowRequest : submits >
 CRMCollaborator "1" --- "1"  Client : manages >
 
