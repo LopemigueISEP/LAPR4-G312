@@ -1,111 +1,41 @@
 @startuml
+skinparam classAttributeIconSize 0
+
 ' Define domain entities
 
 class Organization{
-- vatNumber: int
-- name: String
+- vatNumber
+- name
 }
 
 class User {
-  - email: String
-  - name: String
-  - phoneNumber: String
-  - authenticate(): Boolean
-}
-
-class Client {
-  - vatNumber: String
-  - name: String
-  - address: String
-  - status: ClientStatus
-  - representatives: List<Representative>
-}
-
-
-class Representative {
-  - email: String
-  - name: String
-  - position: String
-}
-
-class ShowRequest {
-  - requestId: String
-  - client: Client
-  - location: String
-  - dateTime: DateTime
-  - numberOfDrones: Int
-  - description: String
-  - status: ShowRequestStatus
-  - figures: List<Figure>
-}
-
-class Figure {
-  - code: String
-  - description: String
-  - version: Int
-  - exclusive: Boolean
-  - dslCode: String
-}
-
-class Show {
-  - showId: String
-  - figures: List<Figure>
-  - status: ShowStatus
-}
-
-class Simulation {
-  - simulationId: String
-  - show: Show
-  - status: SimulationStatus
-  - runSimulation(): Boolean
-}
-
-class Drone {
-  - droneId: String
-  - model: String
-  - softwareVersion: String
-}
-
-class Library {
-  - figures: List<Figure>
+  - email
+  - name
+  - phoneNumber.
+  - role
 
 }
 
-class Orchestrator {
-  - orchestrateShow(show: Show): Boolean
-}
-
-' Define relationships
-User --|> Admin
-User --|> CRMManager
-User --|> CRMCollaborator
-User --|> ShowDesigner
-User --|> DroneTech
-
-Organization "1" -- "many" Client
-Organization "1" -- "many" User
-Client "1" -- "many" Representative
-Client "1" -- "many" ShowRequest
-CRMCollaborator "1" -- "many" ShowRequest
-Client "1" -- "1" ClientStatus
-ShowRequest "1" -- "many" Figure
-ShowRequest "1" -- "1" ShowRequestStatus
-Figure "many" -- "1" Show
-Show "1" -- "1" Simulation
-Show "1" -- "1" ShowStatus
-Simulation "1" -- "many" Drone
-Simulation "1" -- "many" SimulationStatus
-Orchestrator "1" -- "1" Simulation
-Library "1" -- "many" Figure
-
-' Define roles
 class Admin
 class CRMManager
 class CRMCollaborator
 class ShowDesigner
 class DroneTech
 
-' Define enumerations
+class Client {
+  - vatNumber
+  - name
+  - address
+  - status
+
+}
+
+class Representative {
+  - email
+  - name
+  - position
+}
+
 enum ClientStatus {
   Created
   Regular
@@ -114,18 +44,96 @@ enum ClientStatus {
   Deleted
 }
 
-enum ShowRequestStatus {
-  Submitted
-  UnderReview
-  Approved
-  Rejected
-  Scheduled
+
+class ShowRequest {
+  - requestId
+  - client
+  - location
+  - dateTime
+  - numberOfDrones
+  - duration
+  - description
+  - exclusiveOptions
+  - status
+  - figures
 }
 
+enum ShowRequestStatus {
+
+}
+
+class Figure {
+  - code
+  - description
+  - version
+  - exclusive
+  - dslCode
+  - exclusive
+  - exclusiveClient
+  - exclusivePeriod
+}
+
+class Library {
+  - figures
+  - sequences
+
+}
+
+class FigureInShow {
+  - figure
+  - date
+  - duration
+}
+class Show {
+  - showId
+  - figures
+  - status
+}
+class ShowProposal {
+  - proposalId
+  - figures
+  - estimatedDate
+  - estimatedDuration
+  - status
+}
+enum ProposalStatus {
+
+}
 enum ShowStatus {
   Planned
   Running
   Completed
+}
+
+class Drone {
+  - droneId
+
+}
+
+class DroneModel {
+  - name
+  - specs
+}
+class ProgrammingLanguage {
+  - name
+  - version
+}
+
+class Simulation {
+  - simulationId
+  - status
+
+}
+
+class SimulationReport {
+  - simulationId
+  - passed
+  - totalCollisions
+}
+class Collision {
+  - time
+  - position
+  - dronesInvolved
 }
 
 enum SimulationStatus {
@@ -134,5 +142,76 @@ enum SimulationStatus {
   Success
   CollisionDetected
 }
+
+
+class Orchestrator {
+
+}
+
+
+class Location {
+  - name
+  - coordinates
+}
+
+Organization "1" -- "*" Client: has >
+Organization "1" -- "*" User: employs >
+
+User "1"-- "1" Admin: is >
+User "1"-- "1" CRMManager: is >
+User "1"-- "1" CRMCollaborator: is >
+User "1"-- "1" ShowDesigner: is >
+User "1"-- "1" DroneTech: is >
+
+Client "1" --- "*" Representative : has >
+Client "1" --- "1" ClientStatus : has >
+CRMManager "1" --- "*" Client : manages >
+CRMCollaborator "1" --- "*" Client : contacts <
+
+Client "1" --- "*" ShowRequest : requests >
+CRMCollaborator "1" --- "*" ShowRequest : assigns >
+CRMManager "1" --- "*" ShowRequest : assigns >
+ShowRequest "1" --- "1" ShowRequestStatus : has >
+
+Library "1" --- "*" Figure : stores >
+ShowDesigner "1" --- "*" Figure : creates >
+ShowDesigner "1" --- "*" ShowRequest: receives >
+DroneTech "1" --- "*" Figure : tests >
+
+Show "1" --- "*" Figure : includes >
+ShowRequest "1" --- "1" Show : originates >
+CRMCollaborator "1" --- "*" Show : schedules >
+DroneTech "1" --- "*" Show : tests >
+Show "1" --- "1" ShowStatus : has >
+ShowProposal "1" -- "*" Figure : includes >
+ShowProposal "1" -- "1" ShowRequest : originates <
+ShowProposal "1" -- "1" ProposalStatus : has >
+
+Drone "1" --- "1" DroneModel : has >
+DroneModel "1" --- "1" ProgrammingLanguage : has >
+
+FigureInShow "*" --- "1" Figure : has <
+
+Simulation "1" --- "1" Show : simulates >
+Simulation "1" --- "*" Drone : includes >
+DroneTech "1" --- "*" Simulation : executes >
+Simulation "1" --- "1" SimulationStatus : has >
+
+ShowRequest "1" --- "1" Location : happens at >
+
+Client "1" --- "*" ShowProposal : receives >
+CRMCollaborator "1" --- "*" ShowProposal : generates >
+
+Simulation "1" --- "1" SimulationReport : generates >
+SimulationReport "1" --- "*" Collision : contains >
+
+Orchestrator "1" --- "1" Simulation : coordinates >
+
+
+
+
+
+
+
 
 @enduml
