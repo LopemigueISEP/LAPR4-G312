@@ -1,0 +1,65 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+' Define domain entities
+
+class Organization{
+    vatNumber
+    name
+}
+
+class User {
+  email
+  name
+  phoneNumber.
+  role
+
+}
+
+class Admin
+class CRMManager
+class CRMCollaborator
+class ShowDesigner
+class DroneTech
+
+class Client {
+  vatNumber
+  name
+  address
+  status
+  client
+
+}
+
+class ClientRepresentative {
+  name
+  email
+  position
+
+}
+
+Enum ClientStatus {
+    Deleted
+    Infringement
+    Created
+    Regular
+    VIP
+}
+
+Organization "1" -- "*" User: has >
+User "1" -- "1" Admin: is >
+User "1" -- "1" CRMManager: is >
+User "1" -- "1" CRMCollaborator: is >
+User "1" -- "1" ShowDesigner: is >
+User "1" -- "1" DroneTech: is >
+
+Client "1" -- "*" ClientRepresentative: has >
+Client "1" -- "1" ClientStatus: has >
+
+
+
+
+
+
+
+@enduml
