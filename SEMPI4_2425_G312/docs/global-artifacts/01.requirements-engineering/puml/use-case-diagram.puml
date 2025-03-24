@@ -1,0 +1,26 @@
+@startuml
+
+title Use Case Diagram
+
+
+left to right direction
+skinparam packageStyle rectangle
+actor "Project Manager" as PM
+
+rectangle "Sprint 1" {
+  usecase "US101\nTechnical Constraints" as UC101
+  usecase "US102\nProject Repository" as UC102
+  usecase "US103\nProject Structure" as UC103
+  usecase "US104\nContinuous integration server" as UC104
+  usecase "US105\nAutomated deployment" as UC105
+  usecase "US110\nDomain Model" as UC110
+}
+
+PM --> UC101
+PM --> UC102
+PM --> UC103
+PM --> UC104
+PM --> UC105
+PM --> UC110
+
+@enduml

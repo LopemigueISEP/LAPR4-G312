@@ -1,0 +1,228 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+' Define domain entities
+
+class Organization{
+    vatNumber
+    name
+}
+
+class User {
+  email
+  name
+  phoneNumber.
+  role
+
+}
+
+class Admin
+class CRMManager
+class CRMCollaborator
+class ShowDesigner
+class DroneTech
+
+class Client {
+  vatNumber
+  name
+  address
+  status
+  client
+
+}
+
+class ClientRepresentative {
+  name
+  email
+  position
+
+}
+
+Enum ClientStatus {
+    Deleted
+    Infringement
+    Created
+    Regular
+    VIP
+}
+
+
+class Show {
+description
+duration
+}
+
+class Figure {
+    description
+    version
+}
+
+class Sequence {
+}
+
+class FigureProposal{
+}
+
+Enum ShowType{
+SuperExclusive
+}
+
+Enum FigureAvailability{
+Open
+Exclusive
+
+
+}
+
+Class FigureAvailabilityPeriod{
+Period
+}
+
+Class DSL_Code{
+}
+
+Class ClientRequest{
+}
+
+Enum ClientRequestStatus{
+
+}
+
+Class Library{
+}
+
+class Test{
+}
+
+Class Maestro{
+}
+
+Class ShowProposal{
+
+}
+
+
+Class ShowRequest{
+client
+place
+time
+number of drones
+duration
+}
+
+Class ShowDate{
+}
+
+Class ShowDroneList{
+}
+
+Class Drone{
+}
+
+Class DroneInventory{
+}
+
+Enum DroneStatus{
+available
+maintenance
+dead
+}
+
+Class MaintenanceHistory{
+}
+
+Class DroneModel{
+}
+
+Class DroneLanguage{
+}
+
+Class ClientAgenda{
+}
+
+Enum FigureType{
+static
+dynamic
+}
+
+Class FigureDuration{
+
+}
+
+Class TestEnvironment{
+}
+
+Class DroneCode{
+}
+
+Organization "1" -- "*" User: has >
+Organization "1" -- "*" Client: has >
+User "*" -- "1" Admin: Manages <
+User "1" -- "1" CRMManager: is >
+User "1" -- "1" CRMCollaborator: is >
+User "1" -- "1" ShowDesigner: is >
+User "1" -- "1" DroneTech: is >
+
+
+
+Client "1" -- "*" ClientRepresentative: has >
+Client "1" -- "1" ClientStatus: has >
+Show "1" -- "*" Sequence: has >
+Sequence "1" -- "*" Figure: has >
+FigureProposal "1" -- "1" Figure: generates >
+Client "1" -- "*" ClientRequest: makes >
+Show "1" -- "1" ShowType: has >
+Figure "1" -- "1" FigureAvailability: has >
+Client "1" -- "*" Figure: has >
+Figure "1" -- "0..1" FigureAvailabilityPeriod: has >
+Figure "1" -- "1" DSL_Code: has >
+ClientRequest "1" -- "0..1" ShowProposal: wants >
+ClientRequest "1" -- "1" ClientRequestStatus: has >
+Library "1" -- "*" Figure: has >
+Library "1" -- "*" Sequence: has >
+Test "1" -- "0..1" Figure: has >
+Test "1" -- "0..1" Show : has >
+Test "1" -- "*" Maestro: has >
+CRMManager "1" -- "1" ClientStatus: Changes
+CRMManager "1" -- "*" Client: Manages >
+ShowProposal "1" -- "1" Show: has >
+ShowDesigner "*" -- "1" Figure: Create
+ClientRequest "1" -- "0..1" ShowRequest: Requests >
+ShowProposal "1" -- "1" ShowDate: has >
+ShowRequest "1" -- "1" ShowDate: has >
+ShowProposal "1" -- "0..1" ShowRequest: generates >
+ShowRequest "1" -- "1" Show: has >
+Show "1" -- "1" ShowDroneList: has >
+ShowDroneList "1" -- "*" Drone: has >
+CRMCollaborator "1" -- "1" ShowRequest: submit >
+CRMCollaborator "1" -- "1" ShowProposal: generates >
+CRMCollaborator "1" -- "1" ShowDroneList: Configure >
+CRMCollaborator "1" -- "1" Show: Schedule >
+DroneInventory "1" -- "*" Drone: has >
+Drone "1" -- "1" DroneStatus: has >
+Drone "1" -- "1" MaintenanceHistory: has >
+DroneTech "1" -- "1" DroneStatus: changes >
+DroneTech "1" -- "1" DroneInventory: manages >
+DroneTech "1" -- "1" MaintenanceHistory: lists >
+Drone "1" -- "1" DroneModel: has >
+Drone "1" -- "1" DroneLanguage: has >
+DroneTech "1" -- "1" DroneModel: creates >
+DroneTech "1" -- "1" DroneLanguage: configures >
+DroneTech "1" -- "1" DSL_Code: generates >
+DroneTech "1" -- "1" Test: do >
+Client "1" -- "1" ClientAgenda: has >
+ClientAgenda "1" -- "1" ShowRequest: consults >
+Client "1" -- "1" ShowProposal: answers
+Show "1" -- "1" DSL_Code: has >
+Figure "1" -- "1" FigureType: has >
+Figure "1" -- "1" FigureDuration: has >
+CRMCollaborator "1" -- "1"CRMManager: ask create client >
+ShowProposal "1" -- "*" FigureProposal: makes
+CRMManager "1" -- "1" ShowDesigner: assigns >
+ShowDesigner "1" -- "1" ShowRequest: designs >
+Test "1" -- "1" TestEnvironment: has >
+Drone "1" -- "1" DroneCode: has >
+DroneTech "1" -- "1" DSL_Code: uses >
+DSL_Code "1" -- "1" DroneCode : generates >
+
+@enduml
