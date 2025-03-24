@@ -92,8 +92,7 @@ class DroneModel{
  - name
  - specifications
 }
-class System{
-}
+
 class Drone{
 }
 
@@ -139,7 +138,6 @@ class MaintenanceHistory{
 
 ' System & User '
 Admin         "1"  -  "*"  User  : manages >
-User          "1"  -  "1"  System : accesses >
 
 ' Client Management '
 CRMManager    "1"  -- "*"  Client : manages >
@@ -150,7 +148,6 @@ Client        "*"  -- "1"  Representative : has >
 
 ' Show Requests '
 CRMManager    "1"  -- "*"  ShowRequest : assigns >
-ShowRequest   "1"  --- "1"  System : adds >
 ShowRequest   "1"  --- "1"  ShowRequestStatus : has >
 CRMCollaborator "1" --- "1"  ShowRequest : manages >
 CRMCollaborator "1" --- "1"  Client : manages >
@@ -167,7 +164,6 @@ CRMCollaborator "1" --- "*"  Show : schedules >
 
 ' Drone Tech Operations '
 DroneTech      "1" --- "*"  Inventory : manages >
-DroneTech      "1" --- "*"  Show : generates >
 DroneTech      "1" --- "*"  ShowCode : generates >
 DroneTech      "1" --- "*"  ShowCode : tests >
 DroneTech      "1" --- "*"  Simulation : generates >
@@ -204,7 +200,7 @@ User "1" -- "1..*" DroneTech : is >
 
 Sequence "1" -- "*" Figure: has >
 
-Simulation "1" --- "1" Show : tests >
+Simulation "1" --- "1" ShowCode : tests >
 
 Drone      "1" --- "*"  MaintenanceHistory : has >
 Drone      "1" --- "1"  DroneModel : has >
