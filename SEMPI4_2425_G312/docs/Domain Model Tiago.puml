@@ -10,7 +10,7 @@ package Library{
         - exclusivePeriod
     }
 
-    class FigureCode{
+    class DSLCode{
     }
 
     class Sequence{
@@ -136,7 +136,6 @@ Client        "*"  -- "1"  Representative : has >
 CRMManager    "1"  -- "*"  ShowDesigner : assigns >
 ShowRequest   "1"  --- "1"  ShowRequestStatus : has >
 CRMCollaborator "1" --- "1"  ShowRequest : submits >
-CRMCollaborator "1" --- "1..*"  Client : manages >
 
 ' Show Proposal '
 CRMCollaborator "1" --- "1"  ShowProposal : manages >
@@ -151,7 +150,7 @@ CRMCollaborator "1" --- "*"  Show : schedules >
 ' Drone Tech Operations '
 DroneTech      "1" --- "1...*"  Drone : manages >
 DroneTech      "1" --- "*"  Inventory : manages >
-DroneTech      "1" --- "*"  FigureCode : generates >
+DroneTech      "1" --- "*"  DSLCode : generates >
 DroneTech      "1" --- "*"  Figure : tests >
 DroneTech      "1" --- "*"  Sequence : tests >
 DroneTech      "1" --- "*"  Show : tests >
@@ -162,7 +161,7 @@ Drone      "1" --- "1"  DroneModel : has >
 
 
 ' Figure Relationships '
-Figure         "1" --- "1"  FigureCode : has >
+Figure         "1" --- "1"  DSLCode : has >
 
 ' Show Relationships '
 Show           "1" -- "*"  Figure : has >
