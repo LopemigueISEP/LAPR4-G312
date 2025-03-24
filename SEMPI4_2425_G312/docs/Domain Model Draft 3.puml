@@ -1,18 +1,19 @@
 @startuml
-    class Figure{
-        - drones
-        - description
-        - version
-        - exclusive
-        - exclusivePeriod
-    }
+class Figure{
+ - drones
+ - description
+ - version
+ - exclusive
+ - exclusivePeriod
+}
 
-    class DSLCode{
-    }
-    class Sequence{
-    }
+class DSLCode{
+}
 
-Class Library{
+class Sequence{
+}
+
+class Library{
 }
 
 class Organization {
@@ -22,6 +23,7 @@ class Organization {
     phoneNumber
     email
 }
+
 class Client{
     - vatNumber
     - name
@@ -29,6 +31,7 @@ class Client{
     - status
     - representatives
 }
+
 enum ClientStatus{
     Created
     Regular
@@ -42,8 +45,10 @@ class Representative {
   - name: String
   - position: String
 }
+
 class ShowProposal{
 }
+
 class Show{
     - figures
     - showCode
@@ -51,6 +56,7 @@ class Show{
 
 class Simulation{
 }
+
 class User{
     - email
     - name
@@ -58,16 +64,22 @@ class User{
     - password
     - role
 }
+
 class Admin{
 }
+
 class  CRMManager{
 }
+
 class CRMCollaborator{
 }
+
 class ShowDesigner{
 }
+
 class DroneTech{
 }
+
 class ShowRequest{
     - client
     - place
@@ -78,16 +90,18 @@ class ShowRequest{
     - attachment
     - showRequestStatus
 }
-enum ShowRequestStatus {
-  Submitted
-  UnderReview
-  Approved
-  Rejected
-  Scheduled
+
+class ShowRequestStatus {
+  - Submitted
+  - UnderReview
+  - Approved
+  - Rejected
+  - Scheduled
 }
 
 class Inventory{
 }
+
 class DroneModel{
  - name
  - specifications
@@ -114,11 +128,11 @@ class Collision {
   - dronesInvolved
 }
 
-enum SimulationStatus {
-  Pending
-  Running
-  Success
-  CollisionDetected
+class SimulationStatus {
+  - pending
+  - running
+  - success
+  - collisionDetected
 }
 
 class DroneCode{
