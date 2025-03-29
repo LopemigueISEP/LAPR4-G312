@@ -1,0 +1,290 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam backgroundColor white
+
+package "User Context" {
+  class User << Aggregate Root >> {
+
+  }
+
+  class Email << Value Object >> {
+
+  }
+
+  class Name << Value Object >> {
+
+  }
+
+  class PhoneNumber << Value Object >> {
+
+  }
+
+  class Role << Value Object >> {
+
+  }
+
+  enum RoleType {
+    Admin
+    CRMManager
+    CRMCollaborator
+    ShowDesigner
+    DroneTech
+  }
+
+  User *-- Email
+  User *-- Name
+  User *-- PhoneNumber
+  User *-- Role
+  Role --> RoleType
+}
+
+package "Client Context" {
+  class Client << Aggregate Root >> {
+
+  }
+
+  class Representative << Entity >> {
+
+  }
+
+  class Address << Value Object >> {
+
+  }
+
+  class VatNumber << Value Object >> {
+
+  }
+
+  class Name << Value Object >> {
+
+  }
+
+  enum ClientStatus {
+    Created
+    Regular
+    VIP
+    Infringement
+    Deleted
+  }
+
+  Client *-- Address
+  Client *-- VatNumber
+  Client *-- Name
+  Client --> ClientStatus
+}
+
+package "ShowRequest Context" {
+  class ShowRequest << Aggregate Root >> {
+
+  }
+
+  class Location << Value Object >> {
+
+  }
+
+  class Coordinates << Value Object >> {
+
+  }
+
+  class DateTime << Value Object >> {
+
+  }
+
+  class Duration << Value Object >> {
+
+  }
+
+
+
+  enum ShowRequestStatus {
+    Created
+    Assigned
+    InProgress
+    Completed
+    Cancelled
+  }
+
+  ShowRequest *-- Location
+  ShowRequest *-- DateTime
+  ShowRequest *-- Duration
+  ShowRequest --> ShowRequestStatus
+
+  Location *-- Coordinates
+
+}
+
+package "Figure Context" {
+  class Figure << Aggregate Root >> {
+
+  }
+
+  class DronePosition << Value Object >> {
+
+  }
+
+  class Duration << Value Object >> {
+
+  }
+
+  class Sequence << Entity >> {
+
+  }
+
+
+  class DynamicFigure << Entity >> {
+
+  }
+
+  class StaticFigure << Entity >> {
+
+  }
+
+  class ExclusivePeriod << Value Object >> {
+
+  }
+
+  Figure *-- DronePosition
+  Figure *-- Duration
+    Figure *-- ExclusivePeriod
+
+
+
+
+}
+
+package "Show Context" {
+  class Show << Aggregate Root >> {
+
+  }
+
+  class FigureInShow << Entity >> {
+
+  }
+
+  enum ShowStatus {
+    Planned
+    Running
+    Completed
+    Cancelled
+  }
+
+
+
+  FigureInShow *-- Duration
+  Show --> ShowStatus
+}
+
+package "Proposal Context" {
+  class ShowProposal << Aggregate Root >> {
+
+  }
+
+  class ProposedFigure << Value Object >> {
+
+  }
+
+  enum ProposalStatus {
+    Draft
+    Submitted
+    Approved
+    Rejected
+    Expired
+  }
+
+  ShowProposal *-- ProposedFigure
+  ShowProposal --> ProposalStatus
+
+}
+
+package "Drone Context" {
+  class Drone << Aggregate Root >> {
+
+  }
+
+  class Inventory << Entity >> {
+
+  }
+
+  class DroneModel << Value Object >> {
+
+  }
+
+  class DroneSpecification << Value Object >> {
+
+  }
+
+  class MaintenanceHistory << Entity >> {
+  }
+
+  enum DroneStatus {
+    Available
+    Maintenance
+    Disabled
+  }
+
+  Drone *-- DroneModel
+  DroneModel *-- DroneSpecification
+  Drone --> DroneStatus
+}
+
+package "Simulation Context" {
+  class Simulation << Aggregate Root >> {
+
+  }
+
+  class SimulationReport << Entity >> {
+
+  }
+
+  class Collision << Value Object >> {
+
+}
+  class Position3D << Value Object >> {
+
+  }
+
+  enum SimulationStatus {
+    Pending
+    Running
+    Success
+    CollisionDetected
+  }
+
+
+
+  Simulation --> SimulationStatus
+  SimulationReport *-- Collision
+  Collision *-- Position3D
+
+
+}
+
+' Context Relationships
+User "1" -- "*" Client : manages >
+User "1" -- "*" ShowRequest : handles >
+Client "1" -- "*" Representative : has >
+Client "1" -- "1..*" ShowRequest : submits >
+Client "1" -- "1..*" ShowProposal : receives >
+
+ShowRequest "1" -- "1..*" ShowProposal : originates >
+ShowProposal "1" -- "0..*" Show : generates >
+
+Figure "*" -- "*" Sequence : has <
+Figure "1" -- "0..1" DynamicFigure : is a >
+Figure "1" -- "0..1" StaticFigure : is a >
+
+Show "1" -- "*" FigureInShow : has >
+
+
+Inventory "1" -- "*" Drone : contains >
+
+Drone "1" -- "*" MaintenanceHistory : has >
+
+Show "1" -- "*" Drone : uses >
+Show "1" -- "*" Simulation : validates <
+Figure "1" -- "*" Simulation : tests <
+
+Simulation "1" -- "1" SimulationReport : generates >
+
+@enduml
